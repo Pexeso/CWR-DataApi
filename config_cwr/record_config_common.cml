@@ -54,18 +54,24 @@ transaction_record:
     head: COM
     rules:
       [
-        field: component_title
-        field: iswc
-        field: submitter_work_n
-        field: component_duration
-        field: writer_1_last_name
-        field: writer_1_first_name
-        field: writer_1_ipi_name_n
-        field: writer_2_last_name
-        field: writer_2_first_name
-        field: writer_2_ipi_name_n
-        field: writer_1_ipi_base_n
-        field: writer_2_ipi_base_n
+        sequence [
+          field: component_title
+          field: iswc
+          field: submitter_work_n
+          field: component_duration
+          field: writer_1_last_name
+          field: writer_1_first_name
+          field: writer_1_ipi_name_n
+          optional
+            [
+              sequence
+                [
+                  field: writer_2_last_name
+                  field: writer_2_first_name
+                  field: writer_2_ipi_name_n
+                ]
+            ]
+        ]
       ]
 
 transaction_record:
@@ -154,7 +160,10 @@ transaction_record:
       [
         field: number_voices
         field: standard_instrumentation_type
-        field: instrumentation_description
+        optional
+          [
+            field: instrumentation_description
+          ]
       ]
 
 transaction_record:
@@ -477,7 +486,7 @@ transaction_record:
       [
         field: alternate_title
         field: title_type
-        field: language_code
+        field: language_code (optional)
       ]
 
 transaction_record:

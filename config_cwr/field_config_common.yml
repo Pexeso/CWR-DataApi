@@ -225,7 +225,7 @@ group_id:
   name: Group ID
 
 instrumentation_description:
-  type: alphanum
+  type: alphanum_end
   size: 50
   name: Instrumentation Description
 

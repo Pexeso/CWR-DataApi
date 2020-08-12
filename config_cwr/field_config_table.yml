@@ -77,10 +77,9 @@ message_type:
   source: message_type
 
 mr_society:
-  type: lookup_int
+  type: alphanum
   size: 3
   name: Mechanical Rights Affiliation Society
-  source: society_code
 
 music_arrangement:
   type: lookup
@@ -113,10 +112,9 @@ post_term_collection_status:
   source: post_term_collection_status
 
 pr_society:
-  type: lookup_int
+  type: alphanum
   size: 3
   name: Performing Rights Affiliation Society
-  source: society_code
 
 publisher_type:
   type: lookup
@@ -173,10 +171,9 @@ special_agreements:
   source: special_agreement_indicator
 
 sr_society:
-  type: lookup_int
+  type: alphanum
   size: 3
   name: Synchronization Rights Affiliation Society
-  source: society_code
 
 standard_instrumentation_type:
   type: lookup

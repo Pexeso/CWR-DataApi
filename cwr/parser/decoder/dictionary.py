@@ -191,13 +191,16 @@ class AlternateTitleDictionaryDecoder(Decoder):
         super(AlternateTitleDictionaryDecoder, self).__init__()
 
     def decode(self, data):
+        language_code = None
+        if 'language_code' in data:
+            language_code = data['language_code']
         return AlternateTitleRecord(record_type=data['record_type'],
                                     transaction_sequence_n=data[
                                         'transaction_sequence_n'],
                                     record_sequence_n=data['record_sequence_n'],
                                     alternate_title=data['alternate_title'],
                                     title_type=data['title_type'],
-                                    language_code=data['language_code'])
+                                    language_code=language_code)
 
 
 class AuthoredWorkDictionaryDecoder(Decoder):
@@ -248,8 +251,20 @@ class ComponentDictionaryDecoder(Decoder):
             self._ipi_base_decoder = IPIBaseDictionaryDecoder()
 
     def decode(self, data):
-        ipi_base_1 = self._ipi_base_decoder.decode(data['writer_1_ipi_base_n'])
-        ipi_base_2 = self._ipi_base_decoder.decode(data['writer_2_ipi_base_n'])
+        # ipi_base_1 = self._ipi_base_decoder.decode(data['writer_1_ipi_base_n'])
+        # ipi_base_2 = self._ipi_base_decoder.decode(data['writer_2_ipi_base_n'])
+
+        writer_2_last_name = None
+        if 'writer_2_last_name' in data:
+            writer_2_last_name = data['writer_2_last_name']
+
+        writer_2_first_name = None
+        if 'writer_2_first_name' in data:
+            writer_2_first_name = data['writer_2_first_name']
+
+        writer_2_ipi_name_n = None
+        if 'writer_2_ipi_name_n' in data:
+            writer_2_ipi_name_n = data['writer_2_ipi_name_n']
 
         return ComponentRecord(record_type=data['record_type'],
                                transaction_sequence_n=data[
@@ -259,12 +274,12 @@ class ComponentDictionaryDecoder(Decoder):
                                submitter_work_n=data['submitter_work_n'],
                                writer_1_last_name=data['writer_1_last_name'],
                                writer_1_first_name=data['writer_1_first_name'],
-                               writer_2_last_name=data['writer_2_last_name'],
-                               writer_2_first_name=data['writer_2_first_name'],
-                               writer_1_ipi_base_n=ipi_base_1,
+                               writer_2_last_name=writer_2_last_name,
+                               writer_2_first_name=writer_2_first_name,
+                               # writer_1_ipi_base_n=ipi_base_1,
                                writer_1_ipi_name_n=data['writer_1_ipi_name_n'],
-                               writer_2_ipi_base_n=ipi_base_2,
-                               writer_2_ipi_name_n=data['writer_2_ipi_name_n'],
+                               # writer_2_ipi_base_n=ipi_base_2,
+                               writer_2_ipi_name_n=writer_2_ipi_name_n,
                                iswc=data['iswc'],
                                duration=data['duration'])
 
@@ -378,13 +393,16 @@ class InstrumentationSummaryDictionaryDecoder(Decoder):
         super(InstrumentationSummaryDictionaryDecoder, self).__init__()
 
     def decode(self, data):
+        instrumentation_description = None
+        if 'instrumentation_description' in data:
+            instrumentation_description = data['instrumentation_description']
         return InstrumentationSummaryRecord(
             record_type=data['record_type'],
             transaction_sequence_n=data['transaction_sequence_n'],
             record_sequence_n=data['record_sequence_n'],
             number_voices=data['number_voices'],
             standard_instrumentation_type=data['standard_instrumentation_type'],
-            instrumentation_description=data['instrumentation_description'])
+            instrumentation_description=instrumentation_description)
 
 
 class MessageDictionaryDecoder(Decoder):
@@ -708,7 +726,13 @@ class WriterRecordDictionaryDecoder(Decoder):
         self._writer_decoder = WriterDictionaryDecoder()
 
     def decode(self, data):
-        writer = self._writer_decoder.decode(data['writer'])
+        writer = Writer(ip_n=data['ip_n'],
+                      personal_number=data['personal_number'],
+                      ipi_base_n=self._writer_decoder._ipi_base_decoder.decode(data['ipi_base_n']),
+                      writer_first_name=data['writer_first_name'],
+                      writer_last_name=data['writer_last_name'],
+                      tax_id=data['tax_id'],
+                      ipi_name_n=data['ipi_name_n'])
 
         usa_license = None
         if 'usa_license' in data:
@@ -881,7 +905,16 @@ class PublisherRecordDictionaryDecoder(Decoder):
         self._publisher_decoder = PublisherDictionaryDecoder()
 
     def decode(self, data):
-        publisher = self._publisher_decoder.decode(data['publisher'])
+        if 'ipi_base_n' in data:
+            ipi_base = self._publisher_decoder._ipi_base_decoder.decode(data['ipi_base_n'])
+        else:
+            ipi_base = None
+
+        publisher = Publisher(ip_n=data['ip_n'],
+                         publisher_name=data['publisher_name'],
+                         ipi_name_n=data['ipi_name_n'],
+                         ipi_base_n=ipi_base,
+                         tax_id=data['tax_id'])
 
         special_agreements = None
         if 'special_agreements' in data:
