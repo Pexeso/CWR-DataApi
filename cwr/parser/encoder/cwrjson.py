@@ -83,8 +83,8 @@ def _iso_handler(obj):
     :param obj: object to transform into it's ISO format
     :return: the ISO format of the object
     """
-    if hasattr(obj, 'isoformat'):
-        result = obj.isoformat()
+    if hasattr(obj, 'strftime'):
+        result = str(obj)
     else:
         raise TypeError("Unserializable object {} of type {}".format(obj,
                                                                      type(obj)))
