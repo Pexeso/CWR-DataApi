@@ -252,7 +252,9 @@ def _isrc_short(name=None):
         country_regex += c
     country_regex = '(' + country_regex + ')'
 
-    field = pp.Regex(country_regex + '-.{3}-[0-9]{2}-[0-9]{2}')
+    # field = pp.Regex(country_regex + '-.{3}-[0-9]{2}-[0-9]{2}')
+    field = pp.Regex('[A-Z0-9]{2}-.{3}[0-9]{2}-[0-9]{5}')
+    # field = pp.Regex('[^ ]+')
 
     # country.setName('ISO-2 Country Code')
     # registrant.setName('Registrant')
@@ -302,7 +304,9 @@ def _isrc_long(name=None):
         country_regex += c
     country_regex = '(' + country_regex + ')'
 
-    field = pp.Regex(country_regex + '.{3}[0-9]{2}[0-9]{5}')
+    # field = pp.Regex(country_regex + '.{3}[0-9]{2}[0-9]{5}')
+    field = pp.Regex('[A-Z0-9]{2}[A-Z0-9/ -]{10}')
+    # field = pp.Regex('[^ ]+')
 
     # country.setName('ISO-2 Country Code')
     # registrant.setName('Registrant')
